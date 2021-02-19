@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-
+//stores nodes of student object
 struct Student{
         char name[100];
         int id;
@@ -14,8 +14,10 @@ struct Student{
         struct Student_t * next;
 };
 
+//global head of list
 struct Student * HEAD = NULL;
 
+//read in records from text file
 int readFromFile(){
     FILE * input;
     input = fopen("data.txt", "r");
@@ -52,6 +54,7 @@ int readFromFile(){
     return count;
 }
 
+//test function
 void printRecords(){
     struct Student * temp = HEAD;
     while(temp->next != NULL){
@@ -66,6 +69,7 @@ void clearstdin(){
     while((c = getchar()) != '\n' && c != EOF);
 }
 
+//function to add a new record
 void add_student(char * name,int id, char * department,float sub1,float sub2,float sub3){
     struct Student * temp = HEAD;
     while(temp->next != NULL){
@@ -84,6 +88,7 @@ void add_student(char * name,int id, char * department,float sub1,float sub2,flo
     return;
 }
 
+//function to update a students info
 struct Student * update_student(int id, char * column_name, char * new_value){
     struct Student * temp = HEAD;
     while(temp->next != NULL){
@@ -116,6 +121,7 @@ struct Student * update_student(int id, char * column_name, char * new_value){
 
 }
 
+// function to read a students columns
 struct Student * read_student(int id, char * column_name){
     struct Student * temp = HEAD;
     while(temp->next != NULL){
@@ -148,6 +154,7 @@ struct Student * read_student(int id, char * column_name){
 
 }
 
+//function to find a student and show all of its attributes
 struct Student * search_student(int id){
     int found = 0;
     struct Student * temp = HEAD;
@@ -165,6 +172,7 @@ struct Student * search_student(int id){
 
 }
 
+//function to remove a student from the list
 struct Student * delete_student(int id) {
     int found = 0;
     struct Student * trailer = HEAD;
@@ -190,6 +198,7 @@ int main() {
     printf("data from file...\n");
     readFromFile();
     int choice = -1;
+    //menu
     while(choice != 6) {
         printf("Welcome to Student Records Manager!\n");
         printf("What would you like to do?\n");
@@ -226,47 +235,48 @@ int main() {
         char column[100];
         char value[100];
 
-
         switch (choice) {
+            // if the user wishes to add a record
             case 1:
-                printf( "Add A New Student\n");
-                while(1) {
-                    printf( "\nStudent name:");
+                printf("Add A New Student\n");
+                while (1) {
+                    printf("\nStudent name:");
 
                     fgets(name, sizeof(name), stdin);
                     name[strcspn(name, "\n")] = 0;
 
-                    printf( "Student id:");
+                    printf("Student id:");
                     fgets(char_id, sizeof(char_id), stdin);
                     char_id[strcspn(char_id, "\n")] = 0;
 
-                    printf( "Student department:");
+                    printf("Student department:");
 
                     fgets(department, sizeof(department), stdin);
                     department[strcspn(department, "\n")] = 0;
 
-                    printf( "Student Subject 1 grade:");
+                    printf("Student Subject 1 grade:");
 
                     fgets(c_sub1, sizeof(c_sub1), stdin);
                     c_sub1[strcspn(c_sub1, "\n")] = 0;
 
-                    printf( "Student Subject 2 grade:");
+                    printf("Student Subject 2 grade:");
 
                     fgets(c_sub2, sizeof(c_sub2), stdin);
                     c_sub2[strcspn(c_sub2, "\n")] = 0;
 
-                    printf( "Student Subject 3 grade:");
+                    printf("Student Subject 3 grade:");
 
                     fgets(c_sub3, sizeof(c_sub3), stdin);
                     c_sub3[strcspn(c_sub3, "\n")] = 0;
 
-                    if ((id = atoi(char_id)) < 0 || (sub1 = atoi(c_sub1)) < 0 || (sub2 = atoi(c_sub2)) < 0 || (sub3 = atoi(c_sub3)) < 0) {
-                        printf( "Invalid Input: Please Try Again\n");
+                    if ((id = atoi(char_id)) < 0 || (sub1 = atoi(c_sub1)) < 0 || (sub2 = atoi(c_sub2)) < 0 ||
+                        (sub3 = atoi(c_sub3)) < 0) {
+                        printf("Invalid Input: Please Try Again\n");
                         break;
-                    }
-                    else {
-                        printf("Adding Student: %s, %s, %s, %s, %s, %s\n", name, char_id, department, c_sub1, c_sub2, c_sub3);
-                        add_student(name, id, department, sub1,sub2,sub3);
+                    } else {
+                        printf("Adding Student: %s, %s, %s, %s, %s, %s\n", name, char_id, department, c_sub1, c_sub2,
+                               c_sub3);
+                        add_student(name, id, department, sub1, sub2, sub3);
                         break;
                     }
                 }
@@ -274,26 +284,26 @@ int main() {
                 //printf( "Student Added" << endl;
                 break;
 
+                //if the user wishes to update a record
             case 2:
-                printf( "Update a Student Record\n");
-                while(1) {
-                    printf( "Student id:");
+                printf("Update a Student Record\n");
+                while (1) {
+                    printf("Student id:");
                     fgets(char_id, sizeof(char_id), stdin);
                     char_id[strcspn(char_id, "\n")] = 0;
 
                     printf("Column to Update (Options are 'name', 'id', 'department', 'subject1', 'subject2', 'subject3'):");
-                    fgets(column, sizeof(column ), stdin);
+                    fgets(column, sizeof(column), stdin);
                     column[strcspn(column, "\n")] = 0;
 
-                    printf( "New Value:");
+                    printf("New Value:");
                     fgets(value, sizeof(value), stdin);
                     value[strcspn(value, "\n")] = 0;
 
                     if ((id = atoi(char_id)) < 0) {
-                        printf( "Invalid Input: Please Try Again\n");
+                        printf("Invalid Input: Please Try Again\n");
                         continue;
-                    }
-                    else {
+                    } else {
                         update_student(id, column, value);
                         break;
                     }
@@ -301,27 +311,28 @@ int main() {
                 update_student(id, column, value);
                 break;
 
+                //if the user wishes to read a students value
             case 3:
-                printf( "Read a Student Record\n");
-                while(1) {
-                    printf( "Student id:");
+                printf("Read a Student Record\n");
+                while (1) {
+                    printf("Student id:");
                     fgets(char_id, sizeof(char_id), stdin);
                     char_id[strcspn(char_id, "\n")] = 0;
 
                     printf("Column to View (Options are 'name', 'id', 'department', 'subject1', 'subject2', 'subject3'):");
-                    fgets(column, sizeof(column ), stdin);
+                    fgets(column, sizeof(column), stdin);
                     column[strcspn(column, "\n")] = 0;
 
-                    if ((id = atoi(char_id)) < 0){
-                        printf( "Invalid Input: Please Try Again\n" );
+                    if ((id = atoi(char_id)) < 0) {
+                        printf("Invalid Input: Please Try Again\n");
                         read_student(id, column);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
                 break;
 
+            // if the user wishes to find all of a records attributes
             case 4:
                 printf( "Search for a Student Record\n" );
                 while(1) {
@@ -341,6 +352,7 @@ int main() {
 
                 break;
 
+                //if a user wishes to delete a students record
             case 5:
                 printf( "Delete a Student Record\n");
                 while(1) {
@@ -359,11 +371,12 @@ int main() {
                 delete_student(id);
                 break;
 
+                //if a student wants to exit
             case 6:
                 //printRecords();
                 exit(0);
         }
     }
-    printRecords();
+    //printRecords();
     return 0;
 }
